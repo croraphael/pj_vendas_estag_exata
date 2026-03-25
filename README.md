@@ -123,7 +123,7 @@ A camada gold foi dividida em duas partes principais:
 Essa etapa envolve a montagem da modelagem de Data Warehouse Star Schema, que facilita o processamento na análise de dados, devido a sua leveza e relacionamento de informações, facilitando a criação de outras tabelas analíticas futuramente.
 
 A estrutura do Star Schema foi feito da seguinte forma:
-
+![Logo do Databricks](diagrama.excalidraw.png)
 ```mermaid
     erDiagram
         direction TB
