@@ -1,6 +1,6 @@
 ![Logo do Databricks](./assets/databricks_logo(2).png)
 
-![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python) ![Apache Spark](https://img.shields.io/badge/apache-spark-orange?logo=apachespark&logoColor=orange) ![Databricks](https://img.shields.io/badge/databricks-lakehouse-red?logo=databricks&logoColor=red) ![Delta](https://img.shields.io/badge/delta-lake-blue) [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+![Databricks](https://img.shields.io/badge/Databricks-red?logo=databricks&logoColor=white) ![Delta](https://img.shields.io/badge/Delta-Lake-blue) ![Apache Spark](https://img.shields.io/badge/Apache-Spark-orange?logo=apachespark&logoColor=orange) ![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python) ![SQL](https://img.shields.io/badge/SQL-lightblue) [![License](https://img.shields.io/badge/License-green)](LICENSE)
 
 # 📊 Projeto de engenharia de dados Databricks
 
