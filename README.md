@@ -1,4 +1,4 @@
-![Logo do Databricks](./assets/databricks_logo.png)
+![Logo do Databricks](./assets/databricks_logo(2).png)
 
 ![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python) ![Apache Spark](https://img.shields.io/badge/apache-spark-orange?logo=apachespark&logoColor=orange) ![Databricks](https://img.shields.io/badge/databricks-lakehouse-red?logo=databricks&logoColor=red) ![Delta](https://img.shields.io/badge/delta-lake-blue) [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
