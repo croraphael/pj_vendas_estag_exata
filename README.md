@@ -53,14 +53,12 @@ projeto/
 │   └── 002.data_mart/
 │       ├── 000.production
 │       │   ├── 001.vw_sales_performance_by_store_prod.ipynb
-│       │   ├── 002.vw_sales_performance_by_seller_prod.ipynb
-│       │   ├── 003.vw_sales_performance_by_store_seller_prod.ipynb
-│       │   └── 004.vw_sales_performance_by_time_prod.ipynb
+│       │   ├── 002.vw_sales_performance_by_store_seller_prod.ipynb
+│       │   └── 003.vw_sales_performance_by_time_prod.ipynb
 │       │
 │       ├── 001.vw_sales_performance_by_store.ipynb
-│       ├── 002.vw_sales_performance_by_seller.ipynb
-│       ├── 003.vw_sales_performance_by_store_seller.ipynb
-│       └── 004.vw_sales_performance_by_time.ipynb
+│       ├── 002.vw_sales_performance_by_store_seller.ipynb
+│       └── 003.vw_sales_performance_by_time.ipynb
 │
 ├── .gitignore
 ├── LICENSE
@@ -104,7 +102,7 @@ Essa estrutura permite integração com o sistema de jobs do Databricks.
 > [!Important]
 > O tratamento da camada silver é específico a bases de dados com o mesmo **`schema`** da base de dados de referência. Se desejar alterar a base de dados altere os códigos de tratamento, pois pode haver erro ao executar com uma base de dados de **`schema`** diferente.
 
-Ressalta-se que a preferência pelo tipo de tratamento de strings foi acertado com o cliente. Ademais, o tratamento de valores nulos e com quantidades nulas ou iguais a zero também foi tratado com o cliente, ele optou pela escolha de manter quantidades iguais a zero para armazenamento dos dados, mas retirou dos cálculos.
+Ressalta-se que a preferência pelo tipo de tratamento de strings foi acertado com o cliente. Ademais, o tratamento de valores nulos e com quantidades nulas ou iguais a zero também foi tratado com o cliente, ele optou pela escolha de manter quantidades iguais a zero para armazenamento dos dados, mas retirou dos cálculos, este tratado na Gold.
 
 #### Execução
 O notebook [`001.sales_silver.ipynb`](./002.silver/001.sales_silver.ipynb) é responsável pela primeira execução apenas e para mudanças futuras no tratamento dos dados. 
@@ -114,13 +112,13 @@ Para execuções automatizadas é necessário executar o notebook presente na pa
 ---
 
 ### 🥇 Gold Layer
-A camada gold foi dividida em duas partes principais:
+A camada Gold foi dividida em duas partes principais:
 
 - Star Schema
 - Data Mart
 
 #### ⭐ Star Schema
-Essa etapa envolve a montagem da modelagem de Data Warehouse Star Schema, que facilita o processamento na análise de dados, devido a sua leveza e relacionamento de informações, facilitando a criação de outras tabelas analíticas futuramente.
+Essa etapa envolve a montagem da modelagem multimensional Star Schema, que facilita o processamento na análise de dados, devido a sua leveza e relacionamento de informações, facilitando a criação de outras tabelas analíticas futuramente.
 
 A estrutura do Star Schema foi feito da seguinte forma:
 
@@ -149,9 +147,6 @@ A estrutura do Star Schema foi feito da seguinte forma:
             int quantity  ""
             double unit_price ""
             double unit_cost ""
-            double total_price ""
-            double total_cost ""
-            double profit ""
             int _sk_date FK ""
             int _sk_customer FK ""
             int _sk_car FK ""
@@ -204,19 +199,18 @@ Essa etapa foi feita para análise diante do pedido simulado dos clientes para o
 - Como está o comparativo entre anos?
 - Quais unidades e grupos concentram maior volume de vendas?
 
-Como conclusão do pedido foram feitas 4 views. O uso de views foi justificado pelo tamanho reduzido das tabelas, não impactando na performance, e por sua capacidade de atualização ao alterar as tabelas do Star Schema.
+Como conclusão do pedido foram feitas 3 views. O uso de views foi justificado pelo tamanho reduzido das tabelas, não impactando na performance, e por sua capacidade de atualização ao alterar as tabelas do Star Schema.
 
 - Tabela de performance das lojas e grupos de lojas: [`vw_rank_by_store`](./003.gold/002.data_mart/001.vw_sales_performance_by_store.ipynb)
-- Tabela de performance dos vendedores: [`vw_rank_by_seller`](./003.gold/002.data_mart/002.vw_sales_performance_by_seller.ipynb)
-- Tabela de performance de lojas e vendedores: [`vw_rank_by_store_seller`](./003.gold/002.data_mart/003.vw_sales_performance_by_store_seller.ipynb)
-- Tabela de performance por tempo: [`vw_rank_by_time`](./003.gold/002.data_mart/004.vw_sales_performance_by_time.ipynb)
+- Tabela de performance de lojas e vendedores: [`vw_rank_by_store_seller`](./003.gold/002.data_mart/002.vw_sales_performance_by_store_seller.ipynb)
+- Tabela de performance por tempo: [`vw_rank_by_time`](./003.gold/002.data_mart/003.vw_sales_performance_by_time.ipynb)
 
 Dessa forma, as views estão prontas para serem consumidas no BI.
 > [!Note]
 > Caso o BI seja feito no **`Databricks`**, o acesso às views é facilitada. Além disso, é possível o auxílio de Inteligência Artificial do **`Databricks`** o **`AgentAI`** para montagem de dashboards.
 
 #### Execução
-É necessário que a execução dos notebooks fora da pasta `.../000.production/` sejam executados primeiro e apenas uma vez, tanto no Star Schema quanto no Data Mart. Assim foi feito para criação das tabelas e views pela primeira vez.
+É necessário que a execução dos notebooks fora da pasta `.../000.production/` sejam executados primeiro e **apenas uma vez**, tanto no Star Schema quanto no Data Mart. Assim foi feito para criação das tabelas e views pela primeira vez.
 
 Após, é necessário colocar os notebooks dentro da pasta `.../000.production/` no pipeline para execução do tratamento.
 
