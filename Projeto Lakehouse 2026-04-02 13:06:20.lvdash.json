@@ -1,0 +1,1933 @@
+{
+  "datasets": [
+    {
+      "name": "vendas_tempo",
+      "displayName": "Vendas por Tempo",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  workspace.pj_sales.vw_sales_performance_by_time"
+      ],
+      "columns": [
+        {
+          "displayName": "ticket_medio_calc",
+          "description": "Ticket médio por venda",
+          "expression": "`billing` / `sales_quantity`"
+        }
+      ]
+    },
+    {
+      "name": "lojas_vendedores",
+      "displayName": "Ranking Lojas e Vendedores",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  workspace.pj_sales.vw_rank_by_store_seller"
+      ],
+      "columns": [
+        {
+          "displayName": "Margem de Lucro (%)",
+          "description": "Percentual de lucro sobre faturamento",
+          "expression": "(`profit` / `billing`) * 100"
+        },
+        {
+          "displayName": "Ticket Médio",
+          "description": "Valor médio por venda",
+          "expression": "`billing` / `sales_quantity`"
+        }
+      ]
+    },
+    {
+      "name": "lojas",
+      "displayName": "Stores Performance",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  workspace.pj_sales.vw_rank_by_store"
+      ],
+      "columns": [
+        {
+          "displayName": "Profit Margin (%)",
+          "description": "Profit percentage over revenue",
+          "expression": "`profit` / `billing`"
+        },
+        {
+          "displayName": "Average Ticket",
+          "description": "Average value per sale",
+          "expression": "`billing` / `sales_quantity`"
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "e7fafcdb",
+      "displayName": "performance__by_time",
+      "layout": [
+        {
+          "widget": {
+            "name": "filter_year",
+            "queries": [
+              {
+                "name": "dashboards/01f12eade4091ed98454c6d304ade519/datasets/01f12eaf10c61754889db48d466821fd_year",
+                "query": {
+                  "datasetName": "vendas_tempo",
+                  "fields": [
+                    {
+                      "name": "year",
+                      "expression": "`year`"
+                    },
+                    {
+                      "name": "year_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Year",
+                "showTitle": true
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "year",
+                    "queryName": "dashboards/01f12eade4091ed98454c6d304ade519/datasets/01f12eaf10c61754889db48d466821fd_year"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_faturamento",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "vendas_tempo",
+                  "fields": [
+                    {
+                      "name": "sum(billing)",
+                      "expression": "SUM(`billing`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Billing",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(billing)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Billing"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_lucro",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas_vendedores",
+                  "fields": [
+                    {
+                      "name": "sum(profit)",
+                      "expression": "SUM(`profit`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Profit",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(profit)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Profit"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 7,
+            "y": 2,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_quantidade",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "vendas_tempo",
+                  "fields": [
+                    {
+                      "name": "sum(sales_quantity)",
+                      "expression": "SUM(`sales_quantity`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Sales Quantity",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(sales_quantity)",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Qty Sales"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 10,
+            "y": 2,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "line_faturamento_tempo",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "vendas_tempo",
+                  "fields": [
+                    {
+                      "name": "year",
+                      "expression": "`year`"
+                    },
+                    {
+                      "name": "month",
+                      "expression": "`month`"
+                    },
+                    {
+                      "name": "sum(billing)",
+                      "expression": "SUM(`billing`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Billing Evolution",
+                "showTitle": true
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "month",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Month",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(billing)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Billing",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "year",
+                  "legend": {
+                    "position": "bottom"
+                  },
+                  "displayName": "Year",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 12,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_performance",
+            "queries": [
+              {
+                "name": "dashboards/01f12eade4091ed98454c6d304ade519/datasets/01f12eaf10c61754889db48d466821fd_sales_performance_tier",
+                "query": {
+                  "datasetName": "vendas_tempo",
+                  "fields": [
+                    {
+                      "name": "sales_performance_tier",
+                      "expression": "`sales_performance_tier`"
+                    },
+                    {
+                      "name": "sales_performance_tier_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Performance",
+                "showTitle": true
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "sales_performance_tier",
+                    "queryName": "dashboards/01f12eade4091ed98454c6d304ade519/datasets/01f12eaf10c61754889db48d466821fd_sales_performance_tier"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 2,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "pie_performance",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "vendas_tempo",
+                  "fields": [
+                    {
+                      "name": "sum(billing)",
+                      "expression": "SUM(`billing`)"
+                    },
+                    {
+                      "name": "sales_performance_tier",
+                      "expression": "`sales_performance_tier`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Billing by Performance",
+                "showTitle": true
+              },
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "sum(billing)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Billing"
+                },
+                "color": {
+                  "fieldName": "sales_performance_tier",
+                  "legend": {
+                    "hide": true
+                  },
+                  "displayName": "Performance",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_performance",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "vendas_tempo",
+                  "fields": [
+                    {
+                      "name": "sales_performance_tier",
+                      "expression": "`sales_performance_tier`"
+                    },
+                    {
+                      "name": "sum(sales_quantity)",
+                      "expression": "SUM(`sales_quantity`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Quantity by Performance",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sales_performance_tier",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Performance",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(sales_quantity)",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Qty Sales",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "sales_performance_tier",
+                  "legend": {
+                    "hide": true
+                  },
+                  "displayName": "Performance",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 8,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "titulo_dashboard",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# <span style=\"text-align:center;display:block;\"><span style=\"font-size: 48px;line-height: 1.5;\">Lakehouse Project</span></span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_lucro_mensal",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "vendas_tempo",
+                  "fields": [
+                    {
+                      "name": "year",
+                      "expression": "`year`"
+                    },
+                    {
+                      "name": "month",
+                      "expression": "`month`"
+                    },
+                    {
+                      "name": "sum(profit)",
+                      "expression": "SUM(`profit`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Monthly Profit Comparison",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "month",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Month",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(profit)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Profit",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "year",
+                  "legend": {
+                    "position": "bottom"
+                  },
+                  "displayName": "Year",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 22,
+            "width": 12,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "table_comparacao_anos",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "vendas_tempo",
+                  "fields": [
+                    {
+                      "name": "year",
+                      "expression": "`year`"
+                    },
+                    {
+                      "name": "sum(billing)",
+                      "expression": "SUM(`billing`)"
+                    },
+                    {
+                      "name": "sum(profit)",
+                      "expression": "SUM(`profit`)"
+                    },
+                    {
+                      "name": "sum(sales_quantity)",
+                      "expression": "SUM(`sales_quantity`)"
+                    },
+                    {
+                      "name": "avg(sales_growth_mom)",
+                      "expression": "AVG(`sales_growth_mom`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Metrics by Year",
+                "showTitle": true
+              },
+              "rowsPerPage": 25,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "year",
+                    "displayName": "Year"
+                  },
+                  {
+                    "fieldName": "sum(billing)",
+                    "displayName": "Billing"
+                  },
+                  {
+                    "fieldName": "sum(profit)",
+                    "displayName": "Profit"
+                  },
+                  {
+                    "fieldName": "sum(sales_quantity)",
+                    "displayName": "Qty Sales"
+                  },
+                  {
+                    "fieldName": "avg(sales_growth_mom)",
+                    "displayName": "Avg Growth"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 12,
+            "height": 4
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "f5336466",
+      "displayName": "performance_by_seller",
+      "layout": [
+        {
+          "widget": {
+            "name": "titulo_dashboard",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# <span style=\"text-align:center;display:block;\"><span style=\"font-size: 48px;line-height: 1.5;\">Projeto Lakehouse</span></span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_fat",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas_vendedores",
+                  "fields": [
+                    {
+                      "name": "sum(billing)",
+                      "expression": "SUM(`billing`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Billing",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(billing)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Billing"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_lucro",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas_vendedores",
+                  "fields": [
+                    {
+                      "name": "sum(profit)",
+                      "expression": "SUM(`profit`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Profit",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(profit)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Lucro"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 2,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_vendas",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas_vendedores",
+                  "fields": [
+                    {
+                      "name": "sum(sales_quantity)",
+                      "expression": "SUM(`sales_quantity`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Sales Quantity",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(sales_quantity)",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Qty Sales"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_loja",
+            "queries": [
+              {
+                "name": "dashboards/01f12eade4091ed98454c6d304ade519/datasets/01f12eba0e05138788132e1316690af9_store_name",
+                "query": {
+                  "datasetName": "lojas_vendedores",
+                  "fields": [
+                    {
+                      "name": "store_name",
+                      "expression": "`store_name`"
+                    },
+                    {
+                      "name": "store_name_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Store",
+                "showTitle": true
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "store_name",
+                    "queryName": "dashboards/01f12eade4091ed98454c6d304ade519/datasets/01f12eba0e05138788132e1316690af9_store_name"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 2,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_top_vendedores",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas_vendedores",
+                  "fields": [
+                    {
+                      "name": "seller_name",
+                      "expression": "`seller_name`"
+                    },
+                    {
+                      "name": "sum(billing)",
+                      "expression": "SUM(`billing`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Top Sellers by Billing",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "seller_name",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Seller",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(billing)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Billing",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "seller_name",
+                  "legend": {
+                    "hide": true
+                  },
+                  "displayName": "Seller",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_top_vendedores_qty",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas_vendedores",
+                  "fields": [
+                    {
+                      "name": "seller_name",
+                      "expression": "`seller_name`"
+                    },
+                    {
+                      "name": "sum(sales_quantity)",
+                      "expression": "SUM(`sales_quantity`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Top Sellers by Sales Quantity",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "seller_name",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Seller",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(sales_quantity)",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Sales Quantity",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "seller_name",
+                  "legend": {
+                    "hide": true
+                  },
+                  "displayName": "Seller",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 10,
+            "width": 12,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "f89c0a35",
+      "displayName": "performance_by_store",
+      "layout": [
+        {
+          "widget": {
+            "name": "titulo_dashboard",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# <span style=\"text-align:center;display:block;\"><span style=\"font-size: 48px;line-height: 1.5;\">Lakehouse Project</span></span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_group",
+            "queries": [
+              {
+                "name": "dashboards/01f12eade4091ed98454c6d304ade519/datasets/01f12ebcd4711b7a99c2c64a8478ac55_store_group",
+                "query": {
+                  "datasetName": "lojas",
+                  "fields": [
+                    {
+                      "name": "store_group",
+                      "expression": "`store_group`"
+                    },
+                    {
+                      "name": "store_group_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Store Group",
+                "showTitle": true
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "store_group",
+                    "queryName": "dashboards/01f12eade4091ed98454c6d304ade519/datasets/01f12ebcd4711b7a99c2c64a8478ac55_store_group"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_revenue",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas",
+                  "fields": [
+                    {
+                      "name": "sum(billing)",
+                      "expression": "SUM(`billing`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Billing",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(billing)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Billing"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 2,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_profit",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas",
+                  "fields": [
+                    {
+                      "name": "sum(profit)",
+                      "expression": "SUM(`profit`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Profit",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(profit)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Profit"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_sales",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas",
+                  "fields": [
+                    {
+                      "name": "sum(sales_quantity)",
+                      "expression": "SUM(`sales_quantity`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Sales Quantity",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(sales_quantity)",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Qty Sales"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 2,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "table_store_groups",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas",
+                  "fields": [
+                    {
+                      "name": "store_group",
+                      "expression": "`store_group`"
+                    },
+                    {
+                      "name": "sum(billing)",
+                      "expression": "SUM(`billing`)"
+                    },
+                    {
+                      "name": "sum(profit)",
+                      "expression": "SUM(`profit`)"
+                    },
+                    {
+                      "name": "sum(sales_quantity)",
+                      "expression": "SUM(`sales_quantity`)"
+                    },
+                    {
+                      "name": "avg(Average Ticket)",
+                      "expression": "AVG(`Average Ticket`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Metrics by Store Group",
+                "showTitle": true
+              },
+              "rowsPerPage": 25,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "store_group",
+                    "displayName": "Store Group"
+                  },
+                  {
+                    "fieldName": "sum(billing)",
+                    "displayName": "Billing"
+                  },
+                  {
+                    "fieldName": "sum(profit)",
+                    "displayName": "Profit"
+                  },
+                  {
+                    "fieldName": "sum(sales_quantity)",
+                    "displayName": "Qty Sales"
+                  },
+                  {
+                    "fieldName": "avg(Average Ticket)",
+                    "displayName": "Avg Ticket"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 9,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_avg_ticket",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas",
+                  "fields": [
+                    {
+                      "name": "avg(Average Ticket)",
+                      "expression": "AVG(`Average Ticket`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Average Ticket",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(Average Ticket)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Avg Ticket"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 4,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_margin",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas",
+                  "fields": [
+                    {
+                      "name": "avg(Profit Margin (%))",
+                      "expression": "AVG(`Profit Margin (%)`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Profit Margin",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(Profit Margin (%))",
+                  "format": {
+                    "type": "number-percent",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  },
+                  "displayName": "Margin"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 6,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "pie_store_group",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas",
+                  "fields": [
+                    {
+                      "name": "sum(billing)",
+                      "expression": "SUM(`billing`)"
+                    },
+                    {
+                      "name": "store_group",
+                      "expression": "`store_group`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Billing by Store Group",
+                "showTitle": true
+              },
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "sum(billing)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Billing"
+                },
+                "color": {
+                  "fieldName": "store_group",
+                  "legend": {
+                    "hide": true
+                  },
+                  "displayName": "Store Group",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_store_group",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas",
+                  "fields": [
+                    {
+                      "name": "store_group",
+                      "expression": "`store_group`"
+                    },
+                    {
+                      "name": "sum(sales_quantity)",
+                      "expression": "SUM(`sales_quantity`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Quantity by Store Group",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "store_group",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Store Group",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(sales_quantity)",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Qty Sales",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "store_group",
+                  "legend": {
+                    "hide": true
+                  },
+                  "displayName": "Store Group",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 8,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_revenue_by_store",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas",
+                  "fields": [
+                    {
+                      "name": "store_group",
+                      "expression": "`store_group`"
+                    },
+                    {
+                      "name": "store_name",
+                      "expression": "`store_name`"
+                    },
+                    {
+                      "name": "sum(billing)",
+                      "expression": "SUM(`billing`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Billing by Store",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "store_name",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Store",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(billing)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Billing",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "store_group",
+                  "legend": {
+                    "position": "bottom"
+                  },
+                  "displayName": "Store Group",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 12,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_profit_by_store",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas",
+                  "fields": [
+                    {
+                      "name": "store_group",
+                      "expression": "`store_group`"
+                    },
+                    {
+                      "name": "store_name",
+                      "expression": "`store_name`"
+                    },
+                    {
+                      "name": "sum(profit)",
+                      "expression": "SUM(`profit`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Profit by Store",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "store_name",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Store",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(profit)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Profit",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "store_group",
+                  "legend": {
+                    "position": "bottom"
+                  },
+                  "displayName": "Store Group",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 22,
+            "width": 12,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_sales_qty_by_store",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "lojas",
+                  "fields": [
+                    {
+                      "name": "store_group",
+                      "expression": "`store_group`"
+                    },
+                    {
+                      "name": "store_name",
+                      "expression": "`store_name`"
+                    },
+                    {
+                      "name": "sum(sales_quantity)",
+                      "expression": "SUM(`sales_quantity`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Sales Quantity by Store",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "store_name",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Store",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(sales_quantity)",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Qty Sales",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "store_group",
+                  "legend": {
+                    "position": "bottom"
+                  },
+                  "displayName": "Store Group",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 30,
+            "width": 12,
+            "height": 8
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#2B2B2B",
+        "dark": "#1F1F1F"
+      },
+      "widgetBackgroundColor": {
+        "light": "#FFFFFF",
+        "dark": "#2D2D2D"
+      },
+      "widgetBorderColor": {
+        "light": "#E0E0E0",
+        "dark": "#404040"
+      },
+      "fontColor": {
+        "light": "#1F1F1F",
+        "dark": "#E8E8E8"
+      },
+      "selectionColor": {
+        "light": "#E53935",
+        "dark": "#FF6F00"
+      },
+      "visualizationColors": [
+        "#C62828",
+        "#F57C00",
+        "#FDD835",
+        "#D84315",
+        "#FB8C00",
+        "#FFEB3B",
+        "#B71C1C",
+        "#EF6C00"
+      ],
+      "widgetHeaderAlignment": "CENTER",
+      "fontFamily": "Times New Roman"
+    },
+    "applyModeEnabled": false
+  }
+}
