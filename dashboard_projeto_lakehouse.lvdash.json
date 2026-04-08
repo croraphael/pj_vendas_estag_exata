@@ -503,7 +503,7 @@
                     "type": "number-plain",
                     "decimalPlaces": {
                       "type": "exact",
-                      "places": 0
+                      "places": 2
                     },
                     "abbreviation": "compact"
                   },
@@ -866,7 +866,7 @@
                     "type": "number-plain",
                     "decimalPlaces": {
                       "type": "exact",
-                      "places": 0
+                      "places": 2
                     },
                     "abbreviation": "compact"
                   },
@@ -1062,7 +1062,7 @@
                     "type": "number-plain",
                     "decimalPlaces": {
                       "type": "exact",
-                      "places": 0
+                      "places": 2
                     },
                     "abbreviation": "compact"
                   },
@@ -1599,7 +1599,7 @@
                     "type": "number-plain",
                     "decimalPlaces": {
                       "type": "exact",
-                      "places": 0
+                      "places": 2
                     },
                     "abbreviation": "compact"
                   },
@@ -1853,7 +1853,7 @@
                     "type": "number-plain",
                     "decimalPlaces": {
                       "type": "exact",
-                      "places": 0
+                      "places": 2
                     },
                     "abbreviation": "compact"
                   },
