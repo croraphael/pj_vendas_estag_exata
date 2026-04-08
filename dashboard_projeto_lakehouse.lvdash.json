@@ -169,7 +169,7 @@
               {
                 "name": "main_query",
                 "query": {
-                  "datasetName": "lojas_vendedores",
+                  "datasetName": "vendas_tempo",
                   "fields": [
                     {
                       "name": "sum(profit)",
@@ -243,7 +243,7 @@
                     "type": "number-plain",
                     "decimalPlaces": {
                       "type": "exact",
-                      "places": 0
+                      "places": 2
                     },
                     "abbreviation": "compact"
                   },
@@ -338,7 +338,7 @@
           "position": {
             "x": 0,
             "y": 14,
-            "width": 12,
+            "width": 9,
             "height": 8
           }
         },
