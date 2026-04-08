@@ -128,25 +128,27 @@ A estrutura do Star Schema foi feito da seguinte forma:
 
         Dim_Seller {
             int _sk_seller UK ""
-            string seller_id PK ""
+            string seller_id ""
             string seller_name ""
             timestamp valid_from ""
             timestamp valid_to ""
         }
         Dim_Store {
             int _sk_store UK ""
-            int store_id PK ""
+            int store_id ""
             string store_name ""
             string store_group ""
             timestamp valid_from ""
             timestamp valid_to ""
         }
-        Fact_Sale {
-            int _sk_sale UK ""  
-            string invoice_id PK ""  
+        Fact_Sale { 
+            string invoice_id ""  
             int quantity  ""
             double unit_price ""
             double unit_cost ""
+            double total_price ""
+            double total_cost ""
+            double profit ""
             int _sk_date FK ""
             int _sk_customer FK ""
             int _sk_car FK ""
@@ -155,22 +157,22 @@ A estrutura do Star Schema foi feito da seguinte forma:
         }
         Dim_Car {
             int _sk_car UK ""
-            string car_brand PK ""
-            string car_model PK ""
-            string car_part PK ""
+            string car_brand ""
+            string car_model ""
+            string car_part ""
             timestamp valid_from ""
             timestamp valid_to ""
         }
         Dim_Customer {
             int _sk_customer UK ""
-            bigint customer_id PK ""
+            bigint customer_id ""
             string customer_name ""
             timestamp valid_from ""
             timestamp valid_to ""
         }
         Dim_Date {
             int _sk_date UK ""
-            date date PK ""
+            date date ""
             int year ""
             int month ""
             int day_of_month ""
