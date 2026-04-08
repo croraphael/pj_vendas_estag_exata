@@ -60,6 +60,26 @@
           "expression": "`billing` / `sales_quantity`"
         }
       ]
+    },
+    {
+      "name": "vendedores_ranking",
+      "displayName": "Vendedores - Ranking",
+      "queryLines": [
+        "SELECT\n",
+        "  seller_id,\n",
+        "  seller_name,\n",
+        "  SUM(sales_quantity) as total_sales_quantity,\n",
+        "  SUM(billing) as total_billing,\n",
+        "  SUM(profit) as total_profit,\n",
+        "  SUM(product_quantity) as total_product_quantity\n",
+        "FROM\n",
+        "  workspace.pj_sales.vw_rank_by_store_seller\n",
+        "GROUP BY\n",
+        "  seller_id,\n",
+        "  seller_name\n",
+        "ORDER BY\n",
+        "  SUM(billing) DESC"
+      ]
     }
   ],
   "pages": [
@@ -329,7 +349,17 @@
                   },
                   "displayName": "Year",
                   "scale": {
-                    "type": "categorical"
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "2024",
+                        "color": "#E31A1C"
+                      },
+                      {
+                        "value": "2025",
+                        "color": "#1E90FF"
+                      }
+                    ]
                   }
                 }
               }
@@ -338,7 +368,7 @@
           "position": {
             "x": 0,
             "y": 14,
-            "width": 9,
+            "width": 10,
             "height": 8
           }
         },
@@ -437,11 +467,25 @@
                 "color": {
                   "fieldName": "sales_performance_tier",
                   "legend": {
-                    "hide": true
+                    "position": "right"
                   },
                   "displayName": "Performance",
                   "scale": {
-                    "type": "categorical"
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "top",
+                        "color": "#00CC66"
+                      },
+                      {
+                        "value": "middle",
+                        "color": "#1E90FF"
+                      },
+                      {
+                        "value": "low",
+                        "color": "#E31A1C"
+                      }
+                    ]
                   }
                 },
                 "label": {
@@ -522,7 +566,21 @@
                   },
                   "displayName": "Performance",
                   "scale": {
-                    "type": "categorical"
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "top",
+                        "color": "#00CC66"
+                      },
+                      {
+                        "value": "middle",
+                        "color": "#1E90FF"
+                      },
+                      {
+                        "value": "low",
+                        "color": "#E31A1C"
+                      }
+                    ]
                   }
                 },
                 "label": {
@@ -624,8 +682,21 @@
                   },
                   "displayName": "Year",
                   "scale": {
-                    "type": "categorical"
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "2024",
+                        "color": "#E31A1C"
+                      },
+                      {
+                        "value": "2025",
+                        "color": "#1E90FF"
+                      }
+                    ]
                   }
+                },
+                "label": {
+                  "show": true
                 }
               }
             }
@@ -935,18 +1006,18 @@
               {
                 "name": "main_query",
                 "query": {
-                  "datasetName": "lojas_vendedores",
+                  "datasetName": "vendedores_ranking",
                   "fields": [
                     {
                       "name": "seller_name",
                       "expression": "`seller_name`"
                     },
                     {
-                      "name": "sum(billing)",
-                      "expression": "SUM(`billing`)"
+                      "name": "total_billing",
+                      "expression": "`total_billing`"
                     }
                   ],
-                  "disaggregated": false
+                  "disaggregated": true
                 }
               }
             ],
@@ -959,6 +1030,16 @@
               "widgetType": "bar",
               "encodings": {
                 "x": {
+                  "fieldName": "total_billing",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Billing",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
                   "fieldName": "seller_name",
                   "axis": {
                     "hideTitle": true
@@ -967,27 +1048,8 @@
                   "scale": {
                     "type": "categorical",
                     "sort": {
-                      "by": "y-reversed"
+                      "by": "x-reversed"
                     }
-                  }
-                },
-                "y": {
-                  "fieldName": "sum(billing)",
-                  "format": {
-                    "type": "number-currency",
-                    "currencyCode": "BRL",
-                    "decimalPlaces": {
-                      "type": "exact",
-                      "places": 2
-                    },
-                    "abbreviation": "compact"
-                  },
-                  "axis": {
-                    "hideTitle": true
-                  },
-                  "displayName": "Billing",
-                  "scale": {
-                    "type": "quantitative"
                   }
                 },
                 "color": {
@@ -1020,18 +1082,18 @@
               {
                 "name": "main_query",
                 "query": {
-                  "datasetName": "lojas_vendedores",
+                  "datasetName": "vendedores_ranking",
                   "fields": [
                     {
                       "name": "seller_name",
                       "expression": "`seller_name`"
                     },
                     {
-                      "name": "sum(sales_quantity)",
-                      "expression": "SUM(`sales_quantity`)"
+                      "name": "total_sales_quantity",
+                      "expression": "`total_sales_quantity`"
                     }
                   ],
-                  "disaggregated": false
+                  "disaggregated": true
                 }
               }
             ],
@@ -1044,6 +1106,16 @@
               "widgetType": "bar",
               "encodings": {
                 "x": {
+                  "fieldName": "total_sales_quantity",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Sales Quantity",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
                   "fieldName": "seller_name",
                   "axis": {
                     "hideTitle": true
@@ -1052,26 +1124,8 @@
                   "scale": {
                     "type": "categorical",
                     "sort": {
-                      "by": "y-reversed"
+                      "by": "x-reversed"
                     }
-                  }
-                },
-                "y": {
-                  "fieldName": "sum(sales_quantity)",
-                  "format": {
-                    "type": "number-plain",
-                    "decimalPlaces": {
-                      "type": "exact",
-                      "places": 2
-                    },
-                    "abbreviation": "compact"
-                  },
-                  "axis": {
-                    "hideTitle": true
-                  },
-                  "displayName": "Sales Quantity",
-                  "scale": {
-                    "type": "quantitative"
                   }
                 },
                 "color": {
@@ -1533,11 +1587,29 @@
                 "color": {
                   "fieldName": "store_group",
                   "legend": {
-                    "hide": true
+                    "position": "right"
                   },
                   "displayName": "Store Group",
                   "scale": {
-                    "type": "categorical"
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "GRUPO TITAN",
+                        "color": "#1f77b4"
+                      },
+                      {
+                        "value": "GRUPO ATLANTICO",
+                        "color": "#17becf"
+                      },
+                      {
+                        "value": "GRUPO PAMPAS",
+                        "color": "#ff7f0e"
+                      },
+                      {
+                        "value": "GRUPO SERRA",
+                        "color": "#9467bd"
+                      }
+                    ]
                   }
                 },
                 "label": {
@@ -1618,7 +1690,25 @@
                   },
                   "displayName": "Store Group",
                   "scale": {
-                    "type": "categorical"
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "GRUPO TITAN",
+                        "color": "#1f77b4"
+                      },
+                      {
+                        "value": "GRUPO ATLANTICO",
+                        "color": "#17becf"
+                      },
+                      {
+                        "value": "GRUPO PAMPAS",
+                        "color": "#ff7f0e"
+                      },
+                      {
+                        "value": "GRUPO SERRA",
+                        "color": "#9467bd"
+                      }
+                    ]
                   }
                 },
                 "label": {
@@ -1704,7 +1794,25 @@
                   },
                   "displayName": "Store Group",
                   "scale": {
-                    "type": "categorical"
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "GRUPO TITAN",
+                        "color": "#1f77b4"
+                      },
+                      {
+                        "value": "GRUPO ATLANTICO",
+                        "color": "#17becf"
+                      },
+                      {
+                        "value": "GRUPO PAMPAS",
+                        "color": "#ff7f0e"
+                      },
+                      {
+                        "value": "GRUPO SERRA",
+                        "color": "#9467bd"
+                      }
+                    ]
                   }
                 },
                 "label": {
@@ -1790,8 +1898,29 @@
                   },
                   "displayName": "Store Group",
                   "scale": {
-                    "type": "categorical"
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "GRUPO TITAN",
+                        "color": "#1f77b4"
+                      },
+                      {
+                        "value": "GRUPO ATLANTICO",
+                        "color": "#17becf"
+                      },
+                      {
+                        "value": "GRUPO PAMPAS",
+                        "color": "#ff7f0e"
+                      },
+                      {
+                        "value": "GRUPO SERRA",
+                        "color": "#9467bd"
+                      }
+                    ]
                   }
+                },
+                "label": {
+                  "show": true
                 }
               }
             }
@@ -1872,7 +2001,25 @@
                   },
                   "displayName": "Store Group",
                   "scale": {
-                    "type": "categorical"
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "GRUPO TITAN",
+                        "color": "#1f77b4"
+                      },
+                      {
+                        "value": "GRUPO ATLANTICO",
+                        "color": "#17becf"
+                      },
+                      {
+                        "value": "GRUPO PAMPAS",
+                        "color": "#ff7f0e"
+                      },
+                      {
+                        "value": "GRUPO SERRA",
+                        "color": "#9467bd"
+                      }
+                    ]
                   }
                 },
                 "label": {
@@ -1896,16 +2043,16 @@
   "uiSettings": {
     "theme": {
       "canvasBackgroundColor": {
-        "light": "#2B2B2B",
-        "dark": "#1F1F1F"
+        "light": "#F8F9FA",
+        "dark": "#0D0D0D"
       },
       "widgetBackgroundColor": {
         "light": "#FFFFFF",
-        "dark": "#2D2D2D"
+        "dark": "#1A1A1A"
       },
       "widgetBorderColor": {
         "light": "#E0E0E0",
-        "dark": "#404040"
+        "dark": "#333333"
       },
       "fontColor": {
         "light": "#1F1F1F",
@@ -1916,14 +2063,14 @@
         "dark": "#FF6F00"
       },
       "visualizationColors": [
-        "#C62828",
-        "#F57C00",
-        "#FDD835",
-        "#D84315",
-        "#FB8C00",
-        "#FFEB3B",
-        "#B71C1C",
-        "#EF6C00"
+        "#1f77b4",
+        "#17becf",
+        "#ff7f0e",
+        "#9467bd",
+        "#bcbd22",
+        "#e377c2",
+        "#7f7f7f",
+        "#8c564b"
       ],
       "widgetHeaderAlignment": "CENTER",
       "fontFamily": "Times New Roman"
